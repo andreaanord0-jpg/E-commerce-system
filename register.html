@@ -1,0 +1,80 @@
+<!-- register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - E-Shop</title>
+    <link rel="stylesheet" href="C:/xampp/htdocs/ecommerce/assets/styling/style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo"><a href="/">E-Shop</a></div>
+        <ul class="nav-links">
+            <li><a href="/products.html">Products</a></li>
+            <li><a href="/cart.html">Cart</a></li>
+        </ul>
+        <div class="user-info"></div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Register</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="name" required minlength="2">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password (min 6 characters)</label>
+                    <input type="password" id="password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="confirm_password" required>
+                </div>
+                <button type="submit">Register</button>
+                <p style="margin-top: 1rem;">Already have an account? <a href="C:\xampp\htdocs\ecommerce/login.html">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="C:/xampp/htdocs/ecommerce/assets/js/main.js"></script>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            
+            if (password !== confirm) {
+                showAlert('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            try {
+                await apiCall('auth.php?action=register', {
+                    method: 'POST',
+                    body: { name, email, password }
+                });
+                showAlert('Registration successful! Please login.', 'success');
+                setTimeout(() => {
+                    window.location.href = 'C:/xampp/htdocs/ecommerce/login.html';
+                }, 1500);
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

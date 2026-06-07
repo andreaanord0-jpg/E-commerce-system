@@ -1,0 +1,75 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Shop | Home</title>
+    <link rel="stylesheet" href="C:/xampp/htdocs/ecommerce/assets/styling/style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="/">E-Shop</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="C:/xampp/htdocs/ecommerce/products.html">Products</a></li>
+            <li><a href="C:/xampp/htdocs/ecommerce/cart.html">Cart</a></li>
+            <li><a href="C:/xampp/htdocs/ecommerce/orders.html">My Orders</a></li>
+        </ul>
+        <div class="user-info">
+            <!-- Dynamic content via JS -->
+            <a href="C:/xampp/htdocs/ecommerce/login.html">Login</a>
+            <a href="C:/xampp/htdocs/ecommerce/register.html">Register</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Welcome to E-Shop</h1>
+        <p>Your one-stop shop for the best products online.</p>
+        <div style="margin-top: 2rem;">
+            <a href="C:/xampp/htdocs/ecommerce/products.html" class="btn">Browse Products</a>
+        </div>
+        
+        <!-- Featured products section (simple) -->
+        <h2 style="margin-top: 2rem;">Featured Products</h2>
+        <div id="featured-products" class="products-grid">
+            <div class="loading">Loading featured products...</div>
+        </div>
+    </div>
+
+    <script src="/assets/js/main.js"></script>
+    <script>
+        // Load featured products (first 4)
+        async function loadFeatured() {
+            const container = document.getElementById('featured-products');
+            if (!container) return;
+            try {
+                const products = await apiCall('products.php');
+                const featured = products.slice(0, 4);
+                if (featured.length === 0) {
+                    container.innerHTML = '<p>No products available.</p>';
+                    return;
+                }
+                container.innerHTML = '';
+                featured.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                        <img src="${product.image_url || 'https://picsum.photos/id/20/200/200'}" alt="${product.name}">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <div class="product-price">$${product.price}</div>
+                            <a href="/products.html" class="btn">View Details</a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                container.innerHTML = '<p>Failed to load featured products.</p>';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadFeatured);
+    </script>
+</body>
+</html>

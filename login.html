@@ -1,0 +1,64 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - E-Shop</title>
+    <link rel="stylesheet" href="C:/xampp/htdocs/ecommerce/assets/styling/style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo"><a href="/">E-Shop</a></div>
+        <ul class="nav-links">
+            <li><a href="products.html">Products</a></li>
+            <li><a href="cart.html">Cart</a></li>
+        </ul>
+        <div class="user-info"></div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">Login</button>
+                <p style="margin-top: 1rem;">Don't have an account? <a href="register.html">Register here</a></p>
+                <p>Admin demo: admin@example.com / admin123</p>
+            </form>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const result = await apiCall('auth.php?action=login', {
+                    method: 'POST',
+                    body: { email, password }
+                });
+                showAlert('Login successful!', 'success');
+                localStorage.setItem('user', JSON.stringify(result.user));
+                if (result.user.role === 'admin') {
+                    window.location.href = '/admin/dashboard.html';
+                } else {
+                    window.location.href = '/products.html';
+                }
+            } catch (error) {
+                showAlert(error.message, 'error');
+            }
+        });
+    </script>
+</body>
+</html>
