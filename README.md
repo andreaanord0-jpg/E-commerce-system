@@ -1,7 +1,8 @@
 
 E-COMMERCE SYSTEM SETUP INSTRUCTIONS
 
-
+Writer: ANDREA ANORD ANDREA 
+Registration Number: 14322084/T.24
 1. REQUIREMENTS:
    - XAMPP / WAMP / LAMP with PHP 7.4+ and MySQL
    - Web browser
